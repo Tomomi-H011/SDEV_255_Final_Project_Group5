@@ -1,0 +1,84 @@
+{
+  "courseName": "Statistics",
+  "courseId": "MATH 200",
+  "subject": "Mathematics",
+  "credits": 3,
+  "description": "Provides study in the collection, interpretation and presentation of descriptive and inferential statistics."
+},
+{
+  "courseName": "English Composition",
+  "courseId": "ENGL 111",
+  "subject": "English",
+  "credits": 3,
+  "description": "English Composition is designed to develop students’ abilities to craft, organize, and express ideas clearly and effectively in their own writing."
+},
+{
+  "courseName": "Creative Writing",
+  "courseId": "ENGL 202",
+  "subject": "English",
+  "credits": 3,
+  "description": "This course introduces students to opportunities for self-expression in two or more literary genres - fiction, poetry, drama, and creative nonfiction."
+},
+{
+  "courseName": "Introduction to Data Analytics",
+  "courseId": "DBMS 110",
+  "subject": "Data Analytics",
+  "credits": 3,
+  "description": "Introduces students to the basic concepts of databases including the types of databases, the general database environment, and the importance of data to the business world."
+},
+
+
+[
+  {
+    "_id": "67a95be5335247505643f19f",
+    "courseName": "College Algebra",
+    "courseId": "MATH 136",
+    "subject": "Mathematics",
+    "credits": 3,
+    "description": "Presents an in-depth study of functions, quadratic, polynomial, radical, and rational equations, radicals, complex numbers, absolute value equations and inequalities, rational fractions and exponential and logarithmic functions."
+  },
+  {
+    "_id": "67a95c79335247505643f1a0",
+    "courseName": "Computing Logic",
+    "courseId": "SDEV 120",
+    "subject": "Software Development",
+    "credits": 3,
+    "description": "Introduces the student to algorithms , algorithm development, and implementation."
+  },
+  {
+    "_id": "67a9620317fc4c675bc3a8f5",
+    "courseName": "Economics Fundamentals",
+    "courseId": "ECON 101",
+    "subject": "Social Sciences",
+    "credits": 3,
+    "description": "Provides a survey of microeconomics, macroeconomics, international economics, comparative economic systems, historical development of economic thought, and their application to current economic problems.",
+    "__v": 0
+  },
+  {
+    "_id": "67a964fdf9ad8f7bc5601475",
+    "courseName": "Principles of Macroeconomics",
+    "courseId": "ECON 201",
+    "subject": "Social Sciences",
+    "credits": 3,
+    "description": "A descriptive and analytical study of fundamental concepts of national economics.",
+    "__v": 0
+  },
+  {
+    "_id": "67a96593f9ad8f7bc5601477",
+    "courseName": "Calculus I",
+    "courseId": "MATH 211",
+    "subject": "Mathematics",
+    "credits": 4,
+    "description": "Reviews the concepts of exponential, logarithmic and inverse functions.",
+    "__v": 0
+  },
+  {
+    "_id": "67a96622f9ad8f7bc5601479",
+    "courseName": "Statistics",
+    "courseId": "MATH 200",
+    "subject": "Mathematics",
+    "credits": 3,
+    "description": "Provides study in the collection, interpretation and presentation of descriptive and inferential statistics.",
+    "__v": 0
+  }
+]
