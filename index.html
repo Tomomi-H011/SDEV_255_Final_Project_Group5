@@ -1,0 +1,61 @@
+<!-- Final Project SDEV 255 - Student Enrollment Form - Student Enrolllment Section -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Course Course Application - Student Enrollment</title>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+
+    <nav>
+      <ul>
+        <li><a href="index.html">Student</a></li>
+        <li><a href="teacher.html">Teacher</a></li>
+      </ul>
+    </nav>
+
+
+  <!-- Application Title -->
+    <h1>Student Enrollment</h1>
+
+    <!-- Student Sign Up -->
+    <section id="student-sign-up">
+
+      <p class="paragraph-header">Please Enroll in Courses</p>
+
+      <!-- Student Sign-Up Form -->
+
+      <form>
+
+        <!-- Student Name -->
+          <label for="student-name">Name: </label>
+          <input type="text" id="student-name" placeholder="Full Name" required>
+
+          <!-- Student ID -->
+          <label for="student-id">Student-ID: </label>
+          <input type="text" id="student-id" placeholder="ID Number" required>
+
+          <!-- Courses -->
+          <label for="course-select">Courses: </label>
+          <select name="course-select" id="course-select" required>
+            <option value="" disabled selected>Select a Course</option>
+            <option value="course-1">Course 1</option>
+            <option value="course-2">Course 2</option>
+            <option value="course-3">Course 3</option>
+          </select>
+
+          <!-- Enrollment Button -->
+          <button type="submit">Enroll</button>
+
+      </form>
+
+    
+
+    </section>
+</body>
+</html>
