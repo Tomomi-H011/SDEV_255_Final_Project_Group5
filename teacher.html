@@ -1,0 +1,135 @@
+<!-- Final Project SDEV 255 - Student Enrollment Form - Teacher Course Mananagement Form -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Course Course Application - Teacher View</title>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  
+    <nav>
+      <ul>
+        <li><a href="index.html">Student</a></li>
+        <li><a href="teacher.html">Teacher</a></li>
+      </ul>
+    </nav>
+  
+
+  <!-- Application Title -->
+  <h1>Teacher Course Management Form</h1>
+
+  <!-- Student Sign Up -->
+  <section id="teacher-course-management">
+
+    <p class="paragraph-header">Enter Courses to Student Enrollment Form</p>
+
+    <form>
+
+      <!-- Course Name -->
+    <label for="course-name">Course Name: </label>
+    <input type="text" id="course-name" placeholder="Course Name" required>
+
+    <!-- Course ID -->
+    <label for="course-id">Course ID: </label>
+    <input type="text" id="course-id" placeholder="Course ID" required>
+
+    <!-- Course Subject -->
+    <label for="course-subject">Subject: </label>
+    <input type="text" id="course-subject" placeholder="Subject" required>
+
+    <!-- Number of Credits -->
+    <label for="course-credits">Credits: </label>
+    <input type="text" id="course-credits" placeholder="Credits" required>
+
+    <!-- Course Description -->
+    <label for="course-description">Description:</label>
+    <textarea name="course-description" id="course-description" placeholder="Description" required></textarea>
+
+    <!-- Add, Update, View and Delete Courses -->
+    <button type="button" onclick="addCourse()">Add</button>
+    <button type="button" onclick="updateCourse()">Update</button>
+    <button type="button" onclick="viewCourse()">View</button>
+    <button type="button" onclick="deleteCourse()">Delete</button>
+
+    </form>
+
+    <!-- Display Courses -->
+    <div id="course-list"></div>
+
+  </section>
+  <script>
+    // JS Code for Buttons
+    
+    let courses = [];
+
+    // Add Course Button
+    function addCourse() {
+      let course = {
+        name: document.getElementById('course-name').value,
+        id: document.getElementById('course-id').value,
+        subject: document.getElementById('course-subject').value,
+        credits: document.getElementById('course-credits').value,
+        description: document.getElementById('course-description').value
+      };
+      courses.push(course);
+      alert("Course Added!");
+      clearForm();
+    }
+
+    // Update Course Button
+    function updateCourse(){
+      let course = {
+        name: document.getElementById('course-name').value,
+        id: document.getElementById('course-id').value,
+        subject: document.getElementById('course-subject').value,
+        credits: document.getElementById('course-credits').value,
+        description: document.getElementById('course-description').value
+      };
+      courses.push(course);
+      alert("Course Updated");
+      clearForm();
+    }
+    
+    // View Course Button
+    function viewCourse(){
+      const courseList = document.getElementById('course-list');
+      courseList.innerHTML = '';
+      courses.forEach(course => {
+        const courseItem = document.createElement('div');
+        courseItem.innerHTML = `
+        <p> Name: ${course.name} </p>
+        <p> ID: ${course.id} </p>
+        <p> Subject: ${course.subject} </p>
+        <p> Credits: ${course.credits} </p>
+        <p> Description: ${course.description} </p>
+        `;
+        courseList.appendChild(courseItem);
+      });
+    }
+
+    // Delete Course Button
+    function deleteCourse() {
+        let course = {
+          name: document.getElementById('course-name').value,
+          id: document.getElementById('course-id').value,
+          subject: document.getElementById('course-subject').value,
+          credits: document.getElementById('course-credits').value,
+          description: document.getElementById('course-description').value
+        };
+        courses.push(course);
+        alert("Course Deleted");
+        clearForm();
+      }
+
+
+  </script>
+</body>
+
+</html>
