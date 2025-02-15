@@ -6,3 +6,14 @@ const UserSchema = new mongoose.Schema({
     enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }] // For students to track enrolled courses
 });
 const User = mongoose.model('User', UserSchema);
+
+// COURSE MODEL
+const CourseSchema = new mongoose.Schema({
+    courseName: { type: String, required: true },
+    courseId: { type: String, required: true },
+    subject: { type: String, required: true },
+    credits: { type: Number, required: true },
+    description: { type: String, required: true },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+});
+const Course = mongoose.model('Course', CourseSchema);
