@@ -69,35 +69,62 @@
     
     let courses = [];
 
-    // Add Course Button
-    function addCourse() {
-      let course = {
-        name: document.getElementById('course-name').value,
-        id: document.getElementById('course-id').value,
-        subject: document.getElementById('course-subject').value,
-        credits: document.getElementById('course-credits').value,
-        description: document.getElementById('course-description').value
-      };
-      courses.push(course);
-      alert("Course Added!");
-      clearForm();
+    //adding the clearform function so the fields will be cleared after adding, updating, and deleting.
+    function clearForm() { 
+    document.getElementById('course-name').value = '';
+    document.getElementById('course-id').value = '';
+    document.getElementById('course-subject').value = '';
+    document.getElementById('course-credits').value = '';
+    document.getElementById('course-description').value = '';
+  }
+
+    // Add Course function
+    function addCourse() { 
+    let courseId = document.getElementById('course-id').value; 
+
+    // Check if course ID already exists
+    if (courses.some(course => course.id === courseId)) {
+        alert("Course ID already exists!");
+        return;
     }
 
-    // Update Course Button
-    function updateCourse(){
-      let course = {
+    let course = {
         name: document.getElementById('course-name').value,
-        id: document.getElementById('course-id').value,
+        id: courseId,
         subject: document.getElementById('course-subject').value,
         credits: document.getElementById('course-credits').value,
         description: document.getElementById('course-description').value
-      };
-      courses.push(course);
-      alert("Course Updated");
-      clearForm();
+    };
+
+    courses.push(course);
+    alert("Course Added.");
+    clearForm();
+}
+
+    // Update Course function
+    function updateCourse() {
+    let courseId = document.getElementById('course-id').value;
+    let index = courses.findIndex(course => course.id === courseId);
+
+    if (index === -1) {
+        alert("Course not found.");
+        return;
     }
+
+    courses[index] = {
+        name: document.getElementById('course-name').value,
+        id: courseId,
+        subject: document.getElementById('course-subject').value,
+        credits: document.getElementById('course-credits').value,
+        description: document.getElementById('course-description').value
+    };
+
+    alert("Course Updated.");
+    clearForm();
+}
+
     
-    // View Course Button
+    // View Course function
     function viewCourse(){
       const courseList = document.getElementById('course-list');
       courseList.innerHTML = '';
@@ -114,19 +141,20 @@
       });
     }
 
-    // Delete Course Button
+    // Delete Course function
     function deleteCourse() {
-        let course = {
-          name: document.getElementById('course-name').value,
-          id: document.getElementById('course-id').value,
-          subject: document.getElementById('course-subject').value,
-          credits: document.getElementById('course-credits').value,
-          description: document.getElementById('course-description').value
-        };
-        courses.push(course);
-        alert("Course Deleted");
-        clearForm();
-      }
+    let courseId = document.getElementById('course-id').value;
+    let index = courses.findIndex(course => course.id === courseId);
+
+    if (index === -1) {
+        alert("Course not found!");
+        return;
+    }
+
+    courses.splice(index, 1);
+    alert("Course Deleted.");
+    clearForm();
+}
 
 
   </script>
