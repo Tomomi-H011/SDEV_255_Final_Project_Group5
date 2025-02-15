@@ -6,7 +6,8 @@ const Course = db.model('Course', {
     courseId: {type: String, required: true},
     subject: String,
     credits: Number,
-    description: String
+    description: String,
+    username: String
 });
 
 module.exports = Course;  // Export the model
