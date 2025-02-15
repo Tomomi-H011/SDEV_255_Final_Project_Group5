@@ -16,18 +16,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     .then(() => console.log('Connected to the database'))
     .catch(err => console.log('Database connection error:', err));
 
-
-// COURSE MODEL
-const CourseSchema = new mongoose.Schema({
-    courseName: { type: String, required: true },
-    courseId: { type: String, required: true },
-    subject: { type: String, required: true },
-    credits: { type: Number, required: true },
-    description: { type: String, required: true },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-});
-const Course = mongoose.model('Course', CourseSchema);
-
 // AUTHENTICATION AND AUTHORIZATION MIDDLEWARE
 const authenticateToken = (req, res, next) => {
     const token = req.headers['authorization'];
