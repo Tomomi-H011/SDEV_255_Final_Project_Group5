@@ -5,8 +5,8 @@
   "description": "Final project for SDEV255-10P Web Application Development",
   "main": "server.js",
   "scripts": {
-    "server": "nodemon server.js",
-    "start": "node server.js",
+    "server": "nodemon backend.js",
+    "start": "node backend.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
