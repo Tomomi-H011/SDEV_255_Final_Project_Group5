@@ -4,8 +4,11 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
-
 const app = express();
+
+//CONNECT /MODELS
+const Users = require('./models/user')
+const Courses = require('./models/course')
 
 // MIDDLEWARE
 app.use(express.json());
