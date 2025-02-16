@@ -1,13 +1,12 @@
-const db = require('../db');  // Import the database connection
+const mongoose = require('mongoose');
 
-// Define a model for courses
-const Course = db.model('Course', {
-    courseName: {type: String, required: true},
-    courseId: {type: String, required: true},
-    subject: String,
-    credits: Number,
-    description: String,
-    username: String
+const CourseSchema = new mongoose.Schema({
+  courseName: { type: String, required: true },
+  courseId: { type: String, required: true },
+  subject: { type: String, required: true },
+  credits: { type: Number, required: true },
+  description: { type: String, required: true },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
-module.exports = Course;  // Export the model
+module.exports = mongoose.model('Course', CourseSchema);
