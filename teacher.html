@@ -97,6 +97,7 @@
     };
 
     courses.push(course);
+    localStorage.setItem('courses', JSON.stringify(courses));
     alert("Course Added.");
     clearForm();
 }
