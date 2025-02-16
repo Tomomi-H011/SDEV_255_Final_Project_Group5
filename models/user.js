@@ -1,9 +1,10 @@
-const db = require('../db');  // Import the database connection
+const mongoose = require('mongoose');
 
-// Define a model for courses
-const User = db.model('User', {
-    username: {type: String, required: true},
-    password: {type: String, required: true},
-    role: String //'Teacher vs Student
+const UserSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: String, enum: ['student', 'teacher'], required: true },
+  enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }]
 });
-module.exports = User;  // Export the model
+
+module.exports = mongoose.model('User', UserSchema);
