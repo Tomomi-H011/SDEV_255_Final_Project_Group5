@@ -44,18 +44,26 @@
           <label for="course-select">Courses: </label>
           <select name="course-select" id="course-select" required>
             <option value="" disabled selected>Select a Course</option>
-            <option value="course-1">Course 1</option>
-            <option value="course-2">Course 2</option>
-            <option value="course-3">Course 3</option>
           </select>
 
           <!-- Enrollment Button -->
           <button type="submit">Enroll</button>
 
       </form>
-
-    
-
     </section>
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let courses = JSON.parse(localStorage.getItem('courses')) || [];
+
+        let courseSelect =  document.getElementById('course-select');
+
+        courses.forEach(course => {
+          let option = document.createElement('option');
+          option.value = course.id;
+          option.textContent = course.name;
+          courseSelect.appendChild(option)
+        });
+      });
+    </script>
 </body>
 </html>
