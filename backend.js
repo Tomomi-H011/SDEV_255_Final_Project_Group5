@@ -80,16 +80,16 @@ app.post("/api/user", async(req, res) => {
         password: req.body.password,
         role: req.body.role
     })
-    console.log(newUser);
+
 
     try{
         await newUser.save(); // Save the new user to the database
-        res.sendStatus(201).json({ message: 'User registered successfully' }); // Send a status of 201
+        return res.sendStatus(201).json({ message: 'User registered successfully' }); // Send a status of 201
         console.log(newUser);
         }
     catch(err){
         console.log(err);
-        res.sendStatus(400).json({ message: 'Cannot add user' });; // Send a status of 400});
+        return res.sendStatus(400).json({ message: 'Cannot add user' });; // Send a status of 400});
     }
 });
 
