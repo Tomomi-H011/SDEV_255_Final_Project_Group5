@@ -72,7 +72,7 @@ app.get("/api/user", async(req, res) => {
 // Create a new user in the database
 app.post("/api/user", async(req, res) => {
     if(!req.body.username || !req.body.password || !req.body.role){ // If one of the values is missing
-        return res.sendStatus(400).json({error: "Missing username, password, and/or role"}); // Send a status of 400
+        return res.status(400).json({error: "Missing username, password, and/or role"}); // Send a status of 400
     }
 
     const newUser = await new User({
@@ -84,12 +84,12 @@ app.post("/api/user", async(req, res) => {
 
     try{
         await newUser.save(); // Save the new user to the database
-        return res.sendStatus(201).json({ message: 'User registered successfully' }); // Send a status of 201
+        return res.status(201).json({ message: 'User registered successfully' }); // Send a status of 201
         console.log(newUser);
         }
     catch(err){
         console.log(err);
-        return res.sendStatus(400).json({ message: 'Cannot add user' });; // Send a status of 400});
+        return res.status(400).json({ message: 'Cannot add user' });; // Send a status of 400});
     }
 });
 
