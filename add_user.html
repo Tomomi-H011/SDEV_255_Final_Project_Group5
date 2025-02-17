@@ -24,33 +24,34 @@
 
   <!-- Application Title -->
     <h1>User Registration</h1>
+        <section id="userRegistration">
+            <form id="registrationForm">
 
-      <form id="registrationForm">
+                <!-- User Name -->
+                <label for="username">Username: </label>
+                <input type="text" id="username" placeholder="Full Name" required>
 
-        <!-- User Name -->
-          <label for="username">Username: </label>
-          <input type="text" id="username" placeholder="Full Name" required>
+                <!-- Student ID -->
+                <!--<label for="student-id">Student-ID: </label>
+                <input type="text" id="student-id" placeholder="ID Number" required> -->
 
-          <!-- Student ID -->
-          <!--<label for="student-id">Student-ID: </label>
-          <input type="text" id="student-id" placeholder="ID Number" required> -->
+                <!-- Password -->
+                <label for="password">Password: </label>
+                <input type="password" id="password" required>
 
-          <!-- Password -->
-          <label for="password">Password: </label>
-          <input type="password" id="password" required>
+                <!-- Roles -->
+                <label for="role">Role: </label>
+                <select name="role" id="role" required>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+                
 
-        <!-- Roles -->
-        <label for="role">Role: </label>
-        <select name="role" id="role" required>
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-        </select>
-          
+                <!-- Register Button -->
+                <button type="button" id="registerBtn">Register</button>
 
-          <!-- Register Button -->
-          <button type="button" id="registerBtn">Register</button>
+                <p id="error" style="color: red"></p>
+                <div id="resultUser"></div>
 
-          <p id="error" style="color: red"></p>
-
-      </form>
-    </section>
+            </form>
+        </section>

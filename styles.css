@@ -47,7 +47,8 @@ h1{
 /* Student Sign Up - Teacher Course Management Pages */
 
 #student-sign-up, 
-#teacher-course-management {
+#teacher-course-management,
+#userRegistration {
   background-color: #074f35;
   color: #ffffff;
   padding: 20px;
