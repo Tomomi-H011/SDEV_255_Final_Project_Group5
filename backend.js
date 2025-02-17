@@ -52,19 +52,44 @@ app.get("/api/user", async(req, res) => {
     }
 });
 
+//<COME BACK TO THIS WHEN WORKING ON AUTHENTICATION PIECE>
 // Register User (Student or Teacher)
-app.post('/api/register', async (req, res) => {
-    const { username, password, role } = req.body;
-    if (!username || !password || !role) return res.status(400).json({ message: 'All fields are required' });
+// app.post('/api/register', async (req, res) => {
+//     const { username, password, role } = req.body;
+//     if (!username || !password || !role) return res.status(400).json({ message: 'All fields are required' });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ username, password: hashedPassword, role });
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     const user = new User({ username, password: hashedPassword, role });
 
-    try {
-        await user.save();
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+//     try {
+//         await user.save();
+//         res.status(201).json({ message: 'User registered successfully' });
+//     } catch (error) {
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// });
+
+// Create a new user in the database
+app.post("/api/user", async(req, res) => {
+    if(!req.body.username || !req.body.password || !req.body.role){ // If one of the values is missing
+        return res.sendStatus(400).json({error: "Missing username, password, and/or role"}); // Send a status of 400
+    }
+
+    const newUser = await new User({
+        username: req.body.username,  //Grab values from the form
+        password: req.body.password,
+        role: req.body.role
+    })
+    console.log(newUser);
+
+    try{
+        await newUser.save(); // Save the new user to the database
+        res.sendStatus(201); // Send a status of 201
+        console.log(newUser);
+        }
+    catch(err){
+        console.log(err);
+        res.sendStatus(400); // Send a status of 400});
     }
 });
 
