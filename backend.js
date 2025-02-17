@@ -41,7 +41,7 @@ const authorizeRole = (role) => (req, res, next) => {
 // ROUTES
 
 // Get All Users
-router.get("/api/user", async(req, res) => {
+app.get("/api/user", async(req, res) => {
     try{
         const users = await User.find({}); // This will grab all the users
         res.send(users); // This will send the users back to the client
