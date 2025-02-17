@@ -84,12 +84,12 @@ app.post("/api/user", async(req, res) => {
 
     try{
         await newUser.save(); // Save the new user to the database
-        res.sendStatus(201); // Send a status of 201
+        res.sendStatus(201).json({ message: 'User registered successfully' }); // Send a status of 201
         console.log(newUser);
         }
     catch(err){
         console.log(err);
-        res.sendStatus(400); // Send a status of 400});
+        res.sendStatus(400).json({ message: 'Cannot add user' });; // Send a status of 400});
     }
 });
 
