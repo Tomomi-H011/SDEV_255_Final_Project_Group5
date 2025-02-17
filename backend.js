@@ -6,8 +6,8 @@ const cors = require('cors');
 const app = express();
 
 //CONNECT /MODELS
-const Users = require('./models/user')
-const Courses = require('./models/course')
+const User = require('./models/user')
+const Course = require('./models/course')
 
 // MIDDLEWARE
 app.use(express.json());
@@ -39,6 +39,18 @@ const authorizeRole = (role) => (req, res, next) => {
 };
 
 // ROUTES
+
+// Get All Users
+router.get("/api/user", async(req, res) => {
+    try{
+        const users = await User.find({}); // This will grab all the users
+        res.send(users); // This will send the users back to the client
+        console.log(users);
+    }
+    catch(err){
+        console.log(err);
+    }
+});
 
 // Register User (Student or Teacher)
 app.post('/api/register', async (req, res) => {
@@ -147,6 +159,11 @@ app.get('/api/students/:id/courses', authenticateToken, authorizeRole('student')
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
+});
+
+// Add redirect for Glitch
+app.get("/", (req, res) => {
+    res.redirect("/api/courses"); // Redirect the root URL to "/api/courses"
 });
 
 // SERVER SETUP
