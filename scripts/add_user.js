@@ -23,7 +23,11 @@ async function registerUser() {
         const results = await response.json();
         console.log(results);
         alert("User registered successfully"); // Display a success message
-
+        document.querySelector("#resultUser").innerHTML = `
+        <p>User ID: ${results.userId}</p> // Display the user information
+        <p>Username: ${document.querySelector("#username").value}</p>
+        <p>Role: ${document.querySelector("#role").value}</p>
+        `;
         // Reset the form after successful registration
         document.querySelector("#registrationForm").reset();
     }

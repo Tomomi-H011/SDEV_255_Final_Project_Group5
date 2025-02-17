@@ -75,7 +75,16 @@ app.post("/api/user", async(req, res) => {
         return res.status(400).json({error: "Missing username, password, and/or role"}); // Send a status of 400
     }
 
+    // Determine the prefix based on the role
+    const prefix = req.body.role === 'student' ? 'S' : 'T';
+
+    // Find the latest user ID with the same prefix and increment it
+    const latestUser = await User.findOne({ userId: new RegExp(`^${prefix}`) }).sort({ userId: -1 });
+    const latestUserId = latestUser ? parseInt(latestUser.userId.slice(1)) : 0;
+    const newUserId = `${prefix}${String(latestUserId + 1).padStart(4, '0')}`;
+
     const newUser = await new User({
+        userId: newUserId, // Assign the new user ID
         username: req.body.username,  //Grab values from the form
         password: req.body.password,
         role: req.body.role
@@ -84,7 +93,7 @@ app.post("/api/user", async(req, res) => {
 
     try{
         await newUser.save(); // Save the new user to the database
-        return res.status(201).json({ message: 'User registered successfully' }); // Send a status of 201
+        return res.status(201).json({ message: 'User registered successfully', userId: newUser.userId }); // Send back a status of 201 and issued userId
         console.log(newUser);
         }
     catch(err){
