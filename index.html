@@ -1,4 +1,4 @@
-<!-- Final Project SDEV 255 - Student Enrollment Form - Student Enrolllment Section -->
+<!-- Final Project SDEV 255 - Student Enrollment Form - Student Enrollment Section -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,6 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
+  <script src="index.js"></script>
   <title>Course Course Application - Student Enrollment</title>
 </head>
 <body>
@@ -52,20 +53,11 @@
           <button type="submit">Enroll</button>
 
       </form>
-
     </section>
-  <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        let courses = JSON.parse(localStorage.getItem('courses')) || [];
 
-        let courseSelect =  document.getElementById('course-select');
 
-        courses.forEach(course => {
-          let option = document.createElement('option');
-          option.value = course.id;
-          option.textContent = course.name;
-          courseSelect.appendChild(option)
-        });
+</body>
+</html>
       });
     </script>
 </body>
