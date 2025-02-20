@@ -1,4 +1,5 @@
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables
+
 const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -15,7 +16,7 @@ const Course = require('./models/course');
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB
+// Connect to MongoDB (As Requested)
 mongoose.connect('mongodb+srv://group5:Ezac8fFC7yBf2ELW@cluster0.qea7x.mongodb.net/FinalProject?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -131,36 +132,6 @@ app.post('/api/login', async (req, res) => {
         res.status(200).json({ token });
     } catch (err) {
         console.error("Error logging in:", err);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// Get All Courses (Public)
-app.get('/api/courses', async (req, res) => {
-    try {
-        const courses = await Course.find();
-        res.status(200).json(courses);
-    } catch (error) {
-        console.error("Error fetching courses:", error);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// Search Courses by Name or ID (Public)
-app.get('/api/courses/search', async (req, res) => {
-    const { query } = req.query;
-
-    try {
-        const courses = await Course.find({
-            $or: [
-                { courseName: new RegExp(query, 'i') },
-                { courseId: new RegExp(query, 'i') }
-            ]
-        });
-
-        res.status(200).json(courses);
-    } catch (error) {
-        console.error("Error searching courses:", error);
         res.status(500).json({ message: 'Server error' });
     }
 });
