@@ -1,29 +1,33 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
+
 const app = express();
 
-//CONNECT /MODELS
-const User = require('./models/user')
-const Course = require('./models/course')
+// Import Models
+const User = require('./models/user');
+const Course = require('./models/course');
 
-// MIDDLEWARE
+// Middleware
 app.use(express.json());
 app.use(cors());
 
-// CONNECT TO MONGODB
+// Connect to MongoDB
 mongoose.connect('mongodb+srv://group5:Ezac8fFC7yBf2ELW@cluster0.qea7x.mongodb.net/FinalProject?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
     .then(() => console.log('Connected to the database'))
-    .catch(err => console.log('Database connection error:', err));
+    .catch(err => console.error('Database connection error:', err));
 
-// AUTHENTICATION AND AUTHORIZATION MIDDLEWARE
+// Authentication Middleware
 const authenticateToken = (req, res, next) => {
-    const token = req.headers['authorization'];
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(" ")[1]; // Extract token after "Bearer"
+
     if (!token) return res.status(401).json({ message: 'Access denied' });
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
@@ -33,22 +37,22 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
+// Authorization Middleware
 const authorizeRole = (role) => (req, res, next) => {
     if (req.user.role !== role) return res.status(403).json({ message: 'Forbidden' });
     next();
 };
 
-// ROUTES
+// Routes
 
 // Get All Users
-app.get("/api/user", async(req, res) => {
-    try{
-        const users = await User.find({}); // This will grab all the users
-        res.send(users); // This will send the users back to the client
-        console.log(users);
-    }
-    catch(err){
-        console.log(err);
+app.get("/api/users", async (req, res) => {
+    try {
+        const users = await User.find().select("-password"); // Exclude password for security
+        res.status(200).json(users);
+    } catch (err) {
+        console.error("Error fetching users:", err);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
@@ -69,58 +73,75 @@ app.get("/api/user", async(req, res) => {
 //     }
 // });
 
-// Create a new user in the database
-app.post("/api/user", async(req, res) => {
-    if(!req.body.username || !req.body.password || !req.body.role){ // If one of the values is missing
-        return res.status(400).json({error: "Missing username, password, and/or role"}); // Send a status of 400
+// Register User with Auto-Generated ID
+app.post("/api/users", async (req, res) => {
+    const { username, password, role } = req.body;
+
+    if (!username || !password || !role) {
+        return res.status(400).json({ message: "Missing username, password, and/or role" });
     }
 
-    // Determine the prefix based on the role
-    const prefix = req.body.role === 'student' ? 'S' : 'T';
-
-    // Find the latest user ID with the same prefix and increment it
-    const latestUser = await User.findOne({ userId: new RegExp(`^${prefix}`) }).sort({ userId: -1 });
-    const latestUserId = latestUser ? parseInt(latestUser.userId.slice(1)) : 0;
-    const newUserId = `${prefix}${String(latestUserId + 1).padStart(4, '0')}`;
-
-    const newUser = await new User({
-        userId: newUserId, // Assign the new user ID
-        username: req.body.username,  //Grab values from the form
-        password: req.body.password,
-        role: req.body.role
-    })
-
-
-    try{
-        await newUser.save(); // Save the new user to the database
-        return res.status(201).json({ message: 'User registered successfully', userId: newUser.userId }); // Send back a status of 201 and issued userId
-        console.log(newUser);
+    try {
+        // Check if username already exists
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: "Username already taken" });
         }
-    catch(err){
-        console.log(err);
-        return res.status(400).json({ message: 'Cannot add user' });; // Send a status of 400});
+
+        // Determine prefix based on role
+        const prefix = role === 'student' ? 'S' : 'T';
+
+        // Find the latest user ID with the same prefix and increment it
+        const latestUser = await User.findOne({ userId: new RegExp(`^${prefix}`) }).sort({ userId: -1 });
+        const latestUserId = latestUser ? parseInt(latestUser.userId.slice(1)) : 0;
+        const newUserId = `${prefix}${String(latestUserId + 1).padStart(4, '0')}`;
+
+        // Hash Password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create new user
+        const newUser = new User({
+            userId: newUserId,
+            username,
+            password: hashedPassword,
+            role
+        });
+
+        await newUser.save();
+        res.status(201).json({ message: 'User registered successfully', userId: newUser.userId });
+    } catch (err) {
+        console.error("Error creating user:", err);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
 // Login User
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
-    const user = await User.findOne({ username });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+    try {
+        const user = await User.findOne({ username });
+
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        // Generate JWT Token
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.status(200).json({ token });
+    } catch (err) {
+        console.error("Error logging in:", err);
+        res.status(500).json({ message: 'Server error' });
     }
-
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
 });
 
 // Get All Courses (Public)
 app.get('/api/courses', async (req, res) => {
     try {
         const courses = await Course.find();
-        res.json(courses);
+        res.status(200).json(courses);
     } catch (error) {
+        console.error("Error fetching courses:", error);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -128,6 +149,7 @@ app.get('/api/courses', async (req, res) => {
 // Search Courses by Name or ID (Public)
 app.get('/api/courses/search', async (req, res) => {
     const { query } = req.query;
+
     try {
         const courses = await Course.find({
             $or: [
@@ -135,8 +157,10 @@ app.get('/api/courses/search', async (req, res) => {
                 { courseId: new RegExp(query, 'i') }
             ]
         });
-        res.json(courses);
+
+        res.status(200).json(courses);
     } catch (error) {
+        console.error("Error searching courses:", error);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -149,12 +173,12 @@ app.post('/api/courses', authenticateToken, authorizeRole('teacher'), async (req
         return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const course = new Course({ courseName, courseId, subject, credits, description, createdBy: req.user.id });
-
     try {
+        const course = new Course({ courseName, courseId, subject, credits, description, createdBy: req.user.id });
         await course.save();
         res.status(201).json(course);
     } catch (error) {
+        console.error("Error adding course:", error);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -170,6 +194,8 @@ app.post('/api/courses/enroll', authenticateToken, authorizeRole('student'), asy
         if (!course) return res.status(404).json({ message: 'Course not found' });
 
         const student = await User.findById(req.user.id);
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+
         if (student.enrolledCourses.includes(course._id)) {
             return res.status(400).json({ message: 'Already enrolled in this course' });
         }
@@ -179,27 +205,16 @@ app.post('/api/courses/enroll', authenticateToken, authorizeRole('student'), asy
 
         res.status(201).json({ message: `Enrolled in course ${course.courseName}` });
     } catch (error) {
+        console.error("Error enrolling in course:", error);
         res.status(500).json({ message: 'Server error' });
     }
 });
 
-// Get Enrolled Courses (Student Only)
-app.get('/api/students/:id/courses', authenticateToken, authorizeRole('student'), async (req, res) => {
-    try {
-        const student = await User.findById(req.params.id).populate('enrolledCourses');
-        if (!student) return res.status(404).json({ message: 'Student not found' });
-
-        res.json(student.enrolledCourses);
-    } catch (error) {
-        res.status(500).json({ message: 'Server error' });
-    }
-});
-
-// Add redirect for Glitch
+// Redirect Root Route
 app.get("/", (req, res) => {
-    res.redirect("/api/courses"); // Redirect the root URL to "/api/courses"
+    res.redirect("/api/courses");
 });
 
-// SERVER SETUP
+// Server Setup
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
