@@ -48,7 +48,8 @@ h1{
 
 #student-sign-up, 
 #teacher-course-management,
-#userRegistration {
+#userRegistration,
+#courses {
   background-color: #074f35;
   color: #ffffff;
   padding: 20px;
