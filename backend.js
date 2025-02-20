@@ -16,7 +16,7 @@ const Course = require('./models/course');
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB (As Requested)
+// Connect to MongoDB
 mongoose.connect('mongodb+srv://group5:Ezac8fFC7yBf2ELW@cluster0.qea7x.mongodb.net/FinalProject?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -136,7 +136,7 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// Get All Courses (✅ RESTORED ✅)
+// Get All Courses
 app.get('/api/courses', async (req, res) => {
     try {
         const courses = await Course.find();
