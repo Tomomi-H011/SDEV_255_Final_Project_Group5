@@ -102,8 +102,10 @@ app.post("/api/user", async (req, res) => {
 
         // Create new user
         const newUser = new User({
+            userId: newUserId,
             username: req.body.username,  //Grab values from the form
             password: req.body.password,
+
             role: req.body.role
         });
 
