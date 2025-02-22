@@ -75,7 +75,7 @@ app.get("/api/users", async (req, res) => {
 // });
 
 // Register User with Auto-Generated ID
-app.post("/api/users", async (req, res) => {
+app.post("/api/user", async (req, res) => {
     const { username, password, role } = req.body;
 
     if (!username || !password || !role) {
@@ -98,14 +98,13 @@ app.post("/api/users", async (req, res) => {
         const newUserId = `${prefix}${String(latestUserId + 1).padStart(4, '0')}`;
 
         // Hash Password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create new user
         const newUser = new User({
-            userId: newUserId,
-            username,
-            password: hashedPassword,
-            role
+            username: req.body.username,  //Grab values from the form
+            password: req.body.password,
+            role: req.body.role
         });
 
         await newUser.save();

@@ -11,7 +11,7 @@ async function registerUser() {
     };
 
     // Send a POST request to the server and save the user to the database
-    const response = await fetch("https://merciful-spiral-heliotrope.glitch.me/api/users/", {
+    const response = await fetch("https://merciful-spiral-heliotrope.glitch.me/api/user/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
