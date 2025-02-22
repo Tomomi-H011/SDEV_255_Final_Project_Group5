@@ -98,13 +98,13 @@ app.post("/api/user", async (req, res) => {
         const newUserId = `${prefix}${String(latestUserId + 1).padStart(4, '0')}`;
 
         // Hash Password
-        // const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create new user
         const newUser = new User({
             userId: newUserId,
             username: req.body.username,  //Grab values from the form
-            password: req.body.password,
+            password: hashedPassword,
 
             role: req.body.role
         });
