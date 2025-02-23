@@ -149,20 +149,25 @@ app.get('/api/courses', async (req, res) => {
 });
 
 // Add a Course (Teacher Only)
-app.post('/api/courses', authenticateToken, authorizeRole('teacher'), async (req, res) => {
-    const { courseName, courseId, subject, credits, description } = req.body;
+//app.post('/api/courses', authenticateToken, authorizeRole('teacher'), async (req, res) => { //TODO: ADD BACK AUTHENTICATION LATER
 
-    if (!courseName || !courseId || !subject || !credits || !description) {
+app.post('/api/courses', async (req, res) => {
+    const { courseName, courseId, subject, credits, description } = req.body;  //TODO: ADD CREATED BY LATER
+
+    if (!courseName || !courseId || !subject || !credits || !description) { //TODO: ADD CREATED BY LATER
         return res.status(400).json({ message: 'All fields are required' });
     }
 
+    //TODO: ADD DUPLICATE COURSE ID CHECK LATER
+
     try {
-        const course = new Course({ courseName, courseId, subject, credits, description, createdBy: req.user.id });
+        const course = new Course({ courseName, courseId, subject, credits, description});  //TODO: PUT BACK , createdBy: req.user.id 
         await course.save();
-        res.status(201).json(course);
+        return res.status(201).json(course);
+        console.log(course);
     } catch (error) {
         console.error("Error adding course:", error);
-        res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error' });
     }
 });
 
