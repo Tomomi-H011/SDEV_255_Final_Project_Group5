@@ -1,5 +1,5 @@
 // Update Course function
-      function updateCourse() {
+      async function updateCourse() {
         let courseId = document.getElementById('course-id').value;
         let index = courses.findIndex(course => course.id === courseId);
 
@@ -16,6 +16,27 @@
           description: document.getElementById('course-description').value
         };
 
-        alert("Course Updated.");
-        clearForm();
+
+//Put in POST Request to Update Course
+        try{
+          let response = await fetch("/api/courses", {
+            method: "POST",
+            headers: {
+              'Content-Type': "application/json"
+            },
+            body: JSON.stringify(updatedCourse)
+          });
+
+          if (response.ok){
+            course[index] = updatedCourse;
+            localStorage.setItem('courses', JSON.stringify(courses));
+            alert("Course Updated.");
+            clearForm();
+          } else {
+            alert("Failed to update existing course.");
+          }
+        } catch (error){
+          console.error("Error:", error);
+          alert("Error occured while updating course.");
+        }
       }
