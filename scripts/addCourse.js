@@ -1,3 +1,5 @@
+import { getToken, getUserId } from './utils.js'; // Import the functions from utils.js
+
 // Add Course function
 async function addCourse() {
   let courseId = document.getElementById('course-id').value;
@@ -14,10 +16,11 @@ async function addCourse() {
     courseId: courseId,
     subject: document.getElementById('course-subject').value,
     credits: document.getElementById('course-credits').value,
-    description: document.getElementById('course-description').value
-    // createdBy: user.id NEED TO ADD LATER
+    description: document.getElementById('course-description').value,
+    createdBy: getUserId() // Retrieve the userId from local storage
   };
 
+  const token = getToken(); // Retrieve the token from local storage
 
 // "https://merciful-spiral-heliotrope.glitch.me/api/courses/"
 // Put in Post Request for Add Course
@@ -25,7 +28,8 @@ async function addCourse() {
     let response = await fetch("https://merciful-spiral-heliotrope.glitch.me/api/courses/", {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` // Add the token to the Authorization header
       },
       body: JSON.stringify(course)
     });
@@ -55,6 +59,7 @@ async function addCourse() {
       <p>Subject: ${document.getElementById('course-subject').value}</p>
       <p>Credits: ${document.getElementById('course-credits').value}</p>
       <p>Description: ${document.getElementById('course-description').value}</p>
+      <p>Created By: ${getUserId()}</p>
       `;
 
     clearForm();
