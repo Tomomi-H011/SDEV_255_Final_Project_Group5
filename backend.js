@@ -33,7 +33,7 @@ const authenticateToken = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return res.status(403).json({ message: 'Invalid token' });
-        req.user = user;
+        req.user = user; //._id and role from the token
         next();
     });
 };
@@ -130,7 +130,7 @@ app.post('/api/login', async (req, res) => {
 
         // Generate JWT Token
         const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ token });
+        res.status(200).json({ token, userId: user.userId });
     } catch (err) {
         console.error("Error logging in:", err);
         res.status(500).json({ message: 'Server error' });
@@ -149,21 +149,21 @@ app.get('/api/courses', async (req, res) => {
 });
 
 // Add a Course (Teacher Only)
-//app.post('/api/courses', authenticateToken, authorizeRole('teacher'), async (req, res) => { //TODO: ADD BACK AUTHENTICATION LATER
+app.post('/api/courses', authenticateToken, authorizeRole('teacher'), async (req, res) => { 
 
-app.post('/api/courses', async (req, res) => {
-    const { courseName, courseId, subject, credits, description } = req.body;  //TODO: ADD CREATED BY LATER
+// app.post('/api/courses', async (req, res) => {
+    const { courseName, courseId, subject, credits, description, createdBy } = req.body; 
 
-    if (!courseName || !courseId || !subject || !credits || !description) { //TODO: ADD CREATED BY LATER
+    if (!courseName || !courseId || !subject || !credits || !description || !createdBy) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
 
     try {
-        const course = new Course({ courseName, courseId, subject, credits, description});  //TODO: PUT BACK , createdBy: req.user.id 
+        const course = new Course({ courseName, courseId, subject, credits, description, createdBy});   
         await course.save();
-        return res.status(201).json(course);
         console.log(course);
+        return res.status(201).json(course);
     } catch (error) {
         if (error.code === 11000) {
             // Duplicate key error
