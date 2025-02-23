@@ -158,7 +158,6 @@ app.post('/api/courses', async (req, res) => {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
-    //TODO: ADD DUPLICATE COURSE ID CHECK LATER
 
     try {
         const course = new Course({ courseName, courseId, subject, credits, description});  //TODO: PUT BACK , createdBy: req.user.id 
@@ -166,6 +165,10 @@ app.post('/api/courses', async (req, res) => {
         return res.status(201).json(course);
         console.log(course);
     } catch (error) {
+        if (error.code === 11000) {
+            // Duplicate key error
+            return res.status(400).json({ message: 'Course ID already exists' });
+        }
         console.error("Error adding course:", error);
         return res.status(500).json({ message: 'Server error' });
     }

@@ -60,6 +60,10 @@ async function addCourse() {
     clearForm();
     console.log(results);
   }
+  else if (response.status === 400) {
+    alert("All fields are required.");
+    document.querySelector("#course-list").innerHTML = "All fields are required"; // Display an error message
+  }
   else {
     alert("Failed to add course.");
     document.querySelector("#course-list").innerHTML = "Cannot add course"; // Display an error message
