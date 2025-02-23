@@ -66,7 +66,7 @@ async function addCourse() {
   }
   else if (response.status === 409) {
     alert("Course ID already exists.");
-    document.querySelector("#course-list").innerHTML = `Course ID ${document.getElementById('course-id')}already exists`; 
+    document.querySelector("#course-list").innerHTML = `Course ID ${document.getElementById('course-id').value}already exists`; 
   }
   else {
     alert("Failed to add course.");
