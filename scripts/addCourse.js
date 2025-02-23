@@ -1,4 +1,4 @@
-// import { getToken, getUserId } from './utils.js'; // Import the functions from utils.js
+import { getToken, getUserId } from './utils.js'; // Import the functions from utils.js
 
 // Add Course function
 async function addCourse() {
