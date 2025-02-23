@@ -167,7 +167,7 @@ app.post('/api/courses', async (req, res) => {
     } catch (error) {
         if (error.code === 11000) {
             // Duplicate key error
-            return res.status(400).json({ message: 'Course ID already exists' });
+            return res.status(409).json({ message: 'Course ID already exists' });
         }
         console.error("Error adding course:", error);
         return res.status(500).json({ message: 'Server error' });

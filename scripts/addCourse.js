@@ -64,6 +64,10 @@ async function addCourse() {
     alert("All fields are required.");
     document.querySelector("#course-list").innerHTML = "All fields are required"; // Display an error message
   }
+  else if (response.status === 409) {
+    alert("Course ID already exists.");
+    document.querySelector("#course-list").innerHTML = `Course ID ${document.getElementById('course-id')}already exists`; 
+  }
   else {
     alert("Failed to add course.");
     document.querySelector("#course-list").innerHTML = "Cannot add course"; // Display an error message
