@@ -27,10 +27,13 @@ async function login(userId, password){
         //take the token and save it to the local storage
         const tokenResponse = await response.json(); //reive the token from the response
         token = tokenResponse.token; //save the token to the token variable
+        userId = tokenResponse.userId;
+        console.log(userId);
         console.log(token);
 
-        // save the token to the local storage
+        // save the token and userId to the local storage
         localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
         //redirect the user to the home page
         window.location.replace("courses.html");
     }
