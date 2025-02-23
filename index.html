@@ -1,4 +1,4 @@
-<!-- Final Project SDEV 255 - Student Enrollment Form - Student Enrollment Section -->
+<!-- Final Project SDEV 255 - Login Form -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,8 +6,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <script src="scripts/index.js"></script>
-  <title>Course Course Application - Student Enrollment</title>
+  <title>Course Application - User Login</title>
+  <script src="scripts/userLogin.js" defer></script>
 </head>
 <body>
 
@@ -15,51 +15,47 @@
 
     <nav>
       <ul>
-        <li><a href="index.html">Student</a></li>
+        <li><a href="student.html">Student</a></li>
         <li><a href="teacher.html">Teacher</a></li>
         <li><a href="add_user.html">Register</a></li>
         <li><a href="courses.html">Courses</a></li>
-        <li><a href="userLogin.html">Login</a></li>
+        <li><a href="index.html">Login</a></li>
       </ul>
     </nav>
 
 
   <!-- Application Title -->
-    <h1>Student Enrollment</h1>
+    <h1>User Login</h1>
+        <section id="userLogin">
+            <form id="loginForm">
 
-    <!-- Student Sign Up -->
-    <section id="student-sign-up">
+                <!-- User Name -->
+                <label for="userId">User ID: </label>
+                <input type="text" id="userId" placeholder="User ID" required>
 
-      <p class="paragraph-header">Please Enroll in Courses</p>
+                <!-- Student ID -->
+                <!--<label for="student-id">Student-ID: </label>
+                <input type="text" id="student-id" placeholder="ID Number" required> -->
 
-      <!-- Student Sign-Up Form -->
+                <!-- Password -->
+                <label for="password">Password: </label>
+                <input type="password" id="password" required>
 
-      <form>
+                <!-- Roles -->
+                <!-- <label for="role">Role: </label>
+                <select name="role" id="role" required>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select> -->
+                
 
-        <!-- Student Name -->
-          <label for="student-name">Name: </label>
-          <input type="text" id="student-name" placeholder="Full Name" required>
+                <!-- Register Button -->
+                <button type="button" id="loginBtn">Login</button>
+                <br>
+                <p id="error" style="color: red"></p>
+                <div id="resultUser"></div>
 
-          <!-- Student ID -->
-          <label for="student-id">Student-ID: </label>
-          <input type="text" id="student-id" placeholder="ID Number" required>
-
-          <!-- Courses -->
-          <label for="course-select">Courses: </label>
-          <select name="course-select" id="course-select" required>
-            <option value="" disabled selected>Select a Course</option>
-          </select>
-
-          <!-- Enrollment Button -->
-          <button type="submit">Enroll</button>
-
-      </form>
-    </section>
-
-
-</body>
-</html>
-      });
-    </script>
+            </form>
+        </section>
 </body>
 </html>
