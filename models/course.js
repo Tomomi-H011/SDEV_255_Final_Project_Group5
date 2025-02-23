@@ -6,7 +6,8 @@ const CourseSchema = new mongoose.Schema({
   subject: { type: String, required: true },
   credits: { type: Number, required: true },
   description: { type: String, required: true },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+  createdBy: { type: String, required: true }
+  // createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }//
 });
 
 module.exports = mongoose.model('Course', CourseSchema);
