@@ -119,10 +119,10 @@ app.post("/api/user", async (req, res) => {
 
 // Login User
 app.post('/api/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { userId, password } = req.body;
 
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ userId });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ message: 'Invalid credentials' });
