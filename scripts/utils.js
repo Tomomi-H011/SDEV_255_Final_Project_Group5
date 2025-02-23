@@ -1,9 +1,9 @@
 // Function to get the token from local storage
-export function getToken() {
+function getToken() {
     return localStorage.getItem('token');
   }
   
   // Function to get the userId from local storage
-export function getUserId() {
+function getUserId() {
     return localStorage.getItem('userId');
   }
