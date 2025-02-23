@@ -4,11 +4,11 @@ window.onload = function(){
     document.querySelector("#loginBtn").addEventListener("click", async function(){
         const userId = document.querySelector("#userId").value; // Grab the values from the input fields
         const password = document.querySelector("#password").value;
-        login(username, password);
+        login(userId, password);
     })
 };
 
-async function login(username, password){
+async function login(userId, password){
     const login_cred = {
         userId,
         password
