@@ -1,4 +1,14 @@
-import { getToken, getUserId } from './utils.js'; // Import the functions from utils.js
+// import { getToken, getUserId } from './utils.js'; // Import the functions from utils.js
+
+// Function to get the token from local storage
+function getToken() {
+  return localStorage.getItem('token');
+}
+
+// Function to get the userId from local storage
+function getUserId() {
+  return localStorage.getItem('userId');
+}
 
 // Add Course function
 async function addCourse() {
