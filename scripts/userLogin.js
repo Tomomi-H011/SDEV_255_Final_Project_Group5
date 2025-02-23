@@ -32,7 +32,7 @@ async function login(userId, password){
         // save the token to the local storage
         localStorage.setItem("token", token);
         //redirect the user to the home page
-        window.location.replace("index.html");
+        window.location.replace("courses.html");
     }
     else{
         document.querySelector("#errorMsg").innerHTML = "Bad username and password"; //Insert the error message to the div with the id "error"
