@@ -40,7 +40,11 @@ function getUserId() {
             // localStorage.setItem('courses', JSON.stringify(courses));
             alert("Course Deleted.");
             clearForm();
-          } else {
+          } 
+          else if (response.status === 404) {
+            alert("Course not found or User not authorized to delete.");
+          }
+          else {
             alert("Failed to delete course.")
           }
         } catch (error){
