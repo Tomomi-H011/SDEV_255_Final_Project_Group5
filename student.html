@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <script src="scripts/index.js"></script>
+  <script src="scripts/student.js"></script>
   <title>Course Course Application - Student Enrollment</title>
 </head>
 <body>
@@ -37,8 +37,8 @@
       <form>
 
         <!-- Student Name -->
-          <label for="student-name">Name: </label>
-          <input type="text" id="student-name" placeholder="Full Name" required>
+          <!-- <label for="student-name">Name: </label>
+          <input type="text" id="student-name" placeholder="Full Name" required> -->
 
           <!-- Student ID -->
           <label for="student-id">Student-ID: </label>
@@ -51,15 +51,11 @@
           </select>
 
           <!-- Enrollment Button -->
-          <button type="submit">Enroll</button>
-
+          <button type="button" id="enrollBtn">Enroll</button>
       </form>
+      <div id="enrolled-course-list"></div>
     </section>
 
 
-</body>
-</html>
-      });
-    </script>
 </body>
 </html>
