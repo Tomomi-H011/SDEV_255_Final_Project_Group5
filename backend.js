@@ -105,8 +105,8 @@ app.post("/api/user", async (req, res) => {
             userId: newUserId,
             username: req.body.username,  //Grab values from the form
             password: hashedPassword,
-
-            role: req.body.role
+            role: req.body.role,
+            enrolledCourses: []
         });
 
         await newUser.save();
@@ -206,6 +206,20 @@ app.put('/api/courses', authenticateToken, authorizeRole('teacher'), async (req,
     catch (error) {
         console.error("Error updating course:", error);
         return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get Enrolled Courses (Student Only)
+app.get('/api/user', authenticateToken, authorizeRole('student'), async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user.enrolledCourses) {
+            return res.status(404).json({ message: 'Enrolled courses not found' });
+        }
+        res.status(200).json({enrolledCourses: user.enrolledCourses});
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Server error' });
     }
 });
 
