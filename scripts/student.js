@@ -14,21 +14,23 @@ async function fetchEnrolledCourses() {
   // const userId = getUserId();
 
   try {
-  let response = await fetch("https://merciful-spiral-heliotrope.glitch.me/api/user/", {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+    let response = await fetch("https://merciful-spiral-heliotrope.glitch.me/api/user/", {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (response.ok) {
+      let returnedCourses = await response.json();
+      return returnedCourses.enrolledCourses;
     }
-
-  });
-  if (response.ok) {
-    let returnedCourses = await response.json();
-    return returnedCourses.enrolledCourses;
-  } 
-  // else {
-  //   alert("No enrolled courses found.");
-  // } //DO NOT SHOW ALART
+    else if (response.status === 403) {
+      alert("Access denied. Please login as Student to access this page.");
+    }
+    else if (response.status === 404) {
+      alert("No enrolled courses found.");
+    } 
   }
   catch (error) {
     console.error("Error:", error);
@@ -48,7 +50,7 @@ async function fetchAllCourses() {
 // Function to populate the select element with courses
 async function populateCourses() {
   const allCourses = await fetchAllCourses();  // Returns array of all courses
-  const enrolledCourses = await fetchEnrolledCourses();  // Returns array of enrolled courses
+  const enrolledCourseIds = await fetchEnrolledCourses();  // Returns array of enrolled courses
   const courseSelect = document.getElementById('course-select');
   courseSelect.innerHTML = ''; // Clear the select element
 
@@ -74,8 +76,8 @@ addEventListener("DOMContentLoaded", function () {
         // let courseSelect =  document.getElementById('course-select');
 });
 
-// Add Course function
-async function addCourse() {
+// Enroll Course function
+async function enrollCourse() {
   const token = getToken(); // Retrieve the token from local storage
   const userId = getUserId(); // Retrieve the userId from local storage
 
