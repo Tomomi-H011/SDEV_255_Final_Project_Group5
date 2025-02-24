@@ -60,7 +60,7 @@ async function populateCourses() {
   availableCourses.forEach(course => {
     let option = document.createElement('option');
     option.value = course.courseId;
-    option.textContent = `${course.courseId}: ${course.courseName}`; // Format as "courseId: courseName"
+    option.textContent = `${course.courseId} : ${course.courseName}`; // Format as "courseId: courseName"
     courseSelect.appendChild(option);
   });
 
@@ -70,6 +70,10 @@ async function populateCourses() {
 addEventListener("DOMContentLoaded", function () {
   populateCourses(); // Populate the select element with courses
   document.querySelector("#enrollBtn").addEventListener("click", enrollCourse);
+
+  // Populate the student ID field with userId from local storage
+  const userId = getUserId();
+  document.getElementById('student-id').value = userId;
 
         // let courses = JSON.parse(localStorage.getItem('courses')) || [];
 
@@ -81,12 +85,27 @@ async function enrollCourse() {
   const token = getToken(); // Retrieve the token from local storage
   const userId = getUserId(); // Retrieve the userId from local storage
 
-  const selectedCourseName = document.getElementById('course-select').value;
+  const selectedCourseId = document.getElementById('course-select').value; //get the selected course ID from the drop down
   
-        courses.forEach(course => {
-          let option = document.createElement('option');
-          option.value = course.id;
-          option.textContent = course.name;
-          courseSelect.appendChild(option)
-        });
+  try {
+    let response = await fetch("https://merciful-spiral-heliotrope.glitch.me/api/user/enroll", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` // Add the token to the Authorization header
+      },
+      body: JSON.stringify({ courseId: selectedCourseId }) // Send the selected course ID in the request body
+    });
+    if (response.ok) {
+      alert("Enrolled successfully");
+      populateCourses(); // Repopulate the courses
+    }
+    else if (response.status === 400) {
+      alert("Course ID is required");
+    }
+  }
+  catch (error) {
+    console.error("Error:", error);
+    alert("Error occured while enrolling in the course.");
+  }
 };
