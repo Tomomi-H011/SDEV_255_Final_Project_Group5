@@ -224,7 +224,7 @@ app.get('/api/user', authenticateToken, authorizeRole('student'), async (req, re
 });
 
 // Enroll in a Course (Student Only)
-app.post('/api/courses/enroll', authenticateToken, authorizeRole('student'), async (req, res) => {
+app.post('/api/user/enroll', authenticateToken, authorizeRole('student'), async (req, res) => {
     const { courseId } = req.body;
 
     if (!courseId) return res.status(400).json({ message: 'Course ID is required' });
@@ -236,14 +236,14 @@ app.post('/api/courses/enroll', authenticateToken, authorizeRole('student'), asy
         const student = await User.findById(req.user.id);
         if (!student) return res.status(404).json({ message: 'Student not found' });
 
-        if (student.enrolledCourses.includes(course._id)) {
+        if (student.enrolledCourses.includes(course.courseId)) {
             return res.status(400).json({ message: 'Already enrolled in this course' });
         }
 
-        student.enrolledCourses.push(course._id);
+        student.enrolledCourses.push(course.courseId);
         await student.save();
 
-        res.status(201).json({ message: `Enrolled in course ${course.courseName}` });
+        return res.status(201).json(courseId);
     } catch (error) {
         console.error("Error enrolling in course:", error);
         res.status(500).json({ message: 'Server error' });
