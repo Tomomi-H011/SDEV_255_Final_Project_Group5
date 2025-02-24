@@ -174,6 +174,24 @@ app.post('/api/courses', authenticateToken, authorizeRole('teacher'), async (req
     }
 });
 
+// Delete a Course (Teacher Only)
+app.delete('/api/courses', authenticateToken, authorizeRole('teacher'), async (req, res) => {
+    const { courseId, userId } = req.body;
+
+    try {
+        const course = await Course.findOneAndDelete({ courseId: courseId, createdBy: userId });
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found or User not authorized delete' });
+        }
+
+        return res.status(200).json({ message: 'Course deleted successfully' });
+    }
+    catch (error) {
+        console.error("Error deleting course:", error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Enroll in a Course (Student Only)
 app.post('/api/courses/enroll', authenticateToken, authorizeRole('student'), async (req, res) => {
     const { courseId } = req.body;
