@@ -12,6 +12,7 @@ function getUserId() {
       async function deleteCourse() {
         let courseId = document.getElementById('course-id').value;
         let userId = getUserId();
+        const token = getToken();
 
         //THE CODE BELOW IS MOVED TO BACKEND.JS
         // let index = courses.findIndex(course => course.id === courseId);
