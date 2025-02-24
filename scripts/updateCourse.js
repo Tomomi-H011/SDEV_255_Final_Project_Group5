@@ -1,4 +1,4 @@
-const { update } = require("../models/user");
+// const { update } = require("../models/user");
 
 // Function to get the token from local storage
 function getToken() {
