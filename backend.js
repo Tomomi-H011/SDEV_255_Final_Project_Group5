@@ -192,6 +192,23 @@ app.delete('/api/courses', authenticateToken, authorizeRole('teacher'), async (r
     }
 });
 
+// Update a Course (Teacher Only)
+app.put('/api/courses', authenticateToken, authorizeRole('teacher'), async (req, res) => {
+    const { updatedCourse, userId } = req.body;
+
+    try {
+        const course = await Course.findOneAndUpdate({ courseId: updatedCourse.courseId, createdBy: userId }, updatedCourse, { new: true });
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found or User not authorized to update' });
+        }
+        return res.status(200).json(course); // Return the updated course
+    }
+    catch (error) {
+        console.error("Error updating course:", error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Enroll in a Course (Student Only)
 app.post('/api/courses/enroll', authenticateToken, authorizeRole('student'), async (req, res) => {
     const { courseId } = req.body;
