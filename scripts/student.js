@@ -46,7 +46,7 @@ async function displayEnrolledCourses() {
   const courseList = document.getElementById('enrolled-course-list');
   courseList.innerHTML = '';
 
-  enrollCourse.forEach(courseId => {
+  enrolledCourseIds.forEach(courseId => {
   const course = allCourses.find(course => course.courseId === courseId); // Find the course object with the same courseId
   const courseItem = document.createElement('div');
   courseItem.innerHTML = `
