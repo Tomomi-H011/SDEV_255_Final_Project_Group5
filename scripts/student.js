@@ -50,10 +50,8 @@ async function displayEnrolledCourses() {
   const course = allCourses.find(course => course.courseId === courseId); // Find the course object with the same courseId
   const courseItem = document.createElement('div');
   courseItem.innerHTML = `
-    <p> Name: ${course.courseName} </p>
-    <p> ID: ${course.courseId} </p>
+    <p style="font-weight: bold; text-decoration: underline;">${course.courseId} : ${course.courseName} (${course.credits})</p>
     <p> Subject: ${course.subject} </p>
-    <p> Credits: ${course.credits} </p>
     <p> Description: ${course.description} </p>
     <p> Created By: ${course.createdBy} </p>
     <br>
