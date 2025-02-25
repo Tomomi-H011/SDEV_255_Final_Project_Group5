@@ -22,7 +22,7 @@ async function fetchEnrolledCourses() {
       }
     });
     if (response.ok) {
-      let returnedCourses = await response.json();
+      let returnedCourses = await response.json();  // Returns array of enrolled courseIds
       return returnedCourses.enrolledCourses;
     }
     else if (response.status === 403) {
@@ -37,6 +37,32 @@ async function fetchEnrolledCourses() {
     alert("Error occured while fetching enrolled courses.");
   }
 }
+
+// Function to display enrolled courses
+async function displayEnrolledCourses() {
+
+  const enrolledCourseIds = await fetchEnrolledCourses();  // Returns array of enrolled courses
+  const allCourses = await fetchAllCourses();  // Returns objects of all courses
+  const courseList = document.getElementById('enrolled-course-list');
+  courseList.innerHTML = '';
+
+  enrollCourse.forEach(courseId => {
+  const course = allCourses.find(course => course.courseId === courseId); // Find the course object with the same courseId
+  const courseItem = document.createElement('div');
+  courseItem.innerHTML = `
+    <p> Name: ${course.courseName} </p>
+    <p> ID: ${course.courseId} </p>
+    <p> Subject: ${course.subject} </p>
+    <p> Credits: ${course.credits} </p>
+    <p> Description: ${course.description} </p>
+    <p> Created By: ${course.createdBy} </p>
+    <br>
+    `;
+  courseList.appendChild(courseItem);
+  });
+}
+
+
 
 // Function to fetch all courses
 async function fetchAllCourses() {
@@ -69,6 +95,7 @@ async function populateCourses() {
 
 addEventListener("DOMContentLoaded", function () {
   populateCourses(); // Populate the select element with courses
+  displayEnrolledCourses(); // Display the enrolled courses in the enrolled-course-list section
   document.querySelector("#enrollBtn").addEventListener("click", enrollCourse);
 
   // Populate the student ID field with userId from local storage
@@ -98,7 +125,8 @@ async function enrollCourse() {
     });
     if (response.ok) {
       alert("Enrolled successfully");
-      populateCourses(); // Repopulate the courses
+      populateCourses(); // Repopulate the courses in the dropdown
+      displayEnrolledCourses(); // Repopulate the enrolled courses in the enrolled-course-list section
     }
     else if (response.status === 400) {
       alert("Course ID is required");
