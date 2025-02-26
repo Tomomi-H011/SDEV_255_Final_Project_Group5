@@ -156,6 +156,121 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+
+// Get All Courses
+app.get('/api/courses', async (req, res) => {
+    try {
+        const courses = await Course.find();
+        res.status(200).json(courses);
+    } catch (error) {
+        console.error("Error fetching courses:", error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Add a Course (Teacher Only)
+app.post('/api/courses', authenticateToken, authorizeRole('teacher'), async (req, res) => { 
+
+// app.post('/api/courses', async (req, res) => {
+    const { courseName, courseId, subject, credits, description, createdBy } = req.body; 
+
+    if (!courseName || !courseId || !subject || !credits || !description || !createdBy) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+
+    try {
+        const course = new Course({ courseName, courseId, subject, credits, description, createdBy});   
+        await course.save();
+        console.log(course);
+        return res.status(201).json(course);
+    } catch (error) {
+        if (error.code === 11000) {
+            // Duplicate key error
+            return res.status(409).json({ message: 'Course ID already exists' });
+        }
+        console.error("Error adding course:", error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Delete a Course (Teacher Only)
+app.delete('/api/courses', authenticateToken, authorizeRole('teacher'), async (req, res) => {
+    const { courseId, userId } = req.body;
+
+    try {
+        const course = await Course.findOneAndDelete({ courseId: courseId, createdBy: userId });
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found or User not authorized delete' });
+        }
+
+        return res.status(200).json({ message: 'Course deleted successfully' });
+    }
+    catch (error) {
+        console.error("Error deleting course:", error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update a Course (Teacher Only)
+app.put('/api/courses', authenticateToken, authorizeRole('teacher'), async (req, res) => {
+    const { updatedCourse, userId } = req.body;
+
+    try {
+        const course = await Course.findOneAndUpdate({ courseId: updatedCourse.courseId, createdBy: userId }, updatedCourse, { new: true });
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found or User not authorized to update' });
+        }
+        return res.status(200).json(course); // Return the updated course
+    }
+    catch (error) {
+        console.error("Error updating course:", error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get Enrolled Courses (Student Only)
+app.get('/api/user', authenticateToken, authorizeRole('student'), async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user.enrolledCourses) {
+            return res.status(404).json({ message: 'Enrolled courses not found' });
+        }
+        res.status(200).json({enrolledCourses: user.enrolledCourses});
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Enroll in a Course (Student Only)
+app.post('/api/user/enroll', authenticateToken, authorizeRole('student'), async (req, res) => {
+    const { courseId } = req.body;
+
+    if (!courseId) return res.status(400).json({ message: 'Course ID is required' });
+
+    try {
+        const course = await Course.findOne({ courseId });
+        if (!course) return res.status(404).json({ message: 'Course not found' });
+
+        const student = await User.findById(req.user.id);
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+
+        if (student.enrolledCourses.includes(course.courseId)) {
+            return res.status(400).json({ message: 'Already enrolled in this course' });
+        }
+
+        student.enrolledCourses.push(course.courseId);
+        await student.save();
+
+        return res.status(201).json(courseId);
+    } catch (error) {
+        console.error("Error enrolling in course:", error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
 // Apply Middleware to Protect Routes
 app.use("/api/courses", authenticateToken);
 
