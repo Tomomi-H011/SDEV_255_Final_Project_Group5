@@ -105,5 +105,12 @@ button:hover{
   background-color: #f4f4f4;
 }
 
+#student-id {
+    pointer-events: none;  /* Prevent clicking or typing */
+    background-color: #F0F0F0;
+    color: #666666;
+    border: 1px solid #CCCCCC;
+    cursor: not-allowed; /* Show disabled cursor */
+}
 
 
