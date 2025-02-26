@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
-const redis = require("redis");
 
 const app = express();
 
@@ -25,26 +24,18 @@ mongoose.connect(process.env.MONGO_URI, {
     .then(() => console.log('Connected to the database'))
     .catch(err => console.error('Database connection error:', err));
 
-// Connect to Redis
-const redisClient = redis.createClient({
-    url: process.env.REDIS_URL || "redis://127.0.0.1:6379"
-});
-redisClient.on("error", (err) => console.error("Redis Error:", err));
-redisClient.connect();
-
-// Test Redis Connection
-redisClient.ping().then(console.log).catch(console.error);
+// 🔹 In-Memory Token Blacklist (Resets When Server Restarts)
+let tokenBlacklist = new Set();
 
 // Authentication Middleware
-const authenticateToken = async (req, res, next) => {
+const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) return res.status(401).json({ message: 'Access denied' });
 
-    // Check if token is blacklisted in Redis
-    const isBlacklisted = await redisClient.get(token);
-    if (isBlacklisted) {
+    // Check if token is blacklisted
+    if (tokenBlacklist.has(token)) {
         return res.status(401).json({ message: "Token is blacklisted. Please log in again." });
     }
 
@@ -61,25 +52,16 @@ const authorizeRole = (role) => (req, res, next) => {
     next();
 };
 
-// Logout Route - Blacklist Token in Redis
-app.post("/api/logout", async (req, res) => {
+// Logout Route (Adds Token to Blacklist)
+app.post("/api/logout", (req, res) => {
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
         return res.status(401).json({ message: "No token provided" });
     }
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const expiresIn = decoded.exp - Math.floor(Date.now() / 1000);
-
-        // Store the token in Redis with an expiration time
-        await redisClient.set(token, "blacklisted", { EX: expiresIn });
-
-        res.status(200).json({ message: "Logout successful" });
-    } catch (err) {
-        res.status(400).json({ message: "Invalid token" });
-    }
+    tokenBlacklist.add(token); // Add token to in-memory blacklist
+    res.status(200).json({ message: "Logout successful" });
 });
 
 // Routes
@@ -160,7 +142,13 @@ app.post('/api/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        // Token expires in 1 hour
+        const token = jwt.sign(
+            { id: user._id, role: user.role }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '1h' }
+        );
+
         res.status(200).json({ token, userId: user.userId });
     } catch (err) {
         console.error("Error logging in:", err);
@@ -178,4 +166,4 @@ app.get("/", (req, res) => {
 
 // Server Setup
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
