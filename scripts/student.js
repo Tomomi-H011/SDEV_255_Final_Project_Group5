@@ -135,3 +135,37 @@ async function enrollCourse() {
     alert("Error occured while enrolling in the course.");
   }
 };
+
+
+// Remove Button
+document.getElementById('removeBtn').addEventListener('click', function(){
+  const courseId = document.getElementById('course-select') // Get Selected Course ID
+
+  removeCourse(courseId); // Call removeCourse function with the selected course ID
+});
+
+// Remove Course Function
+async function removeCourse(courseId) {
+  const token = getToken(); // Retrieve the token from local storage
+  const userId = getUserId(); // Retrieve the userId from local storage
+
+  try{
+    let response = await fetch(`https://merciful-spiral-heliotrope.glitch.me/api/user/remove/${courseId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` //Add token to Autorization header
+      }
+    });
+    if (response.ok){
+      alert("Removed from Course Successfully");
+      populateCourses(); //Repopulate the courses in dropdown
+      displayEnrolledCourses(); //Repopulate the enrolled courses in the enrolled-courses-list section
+    } else if (response.status === 400){
+      alert("Course ID is required");
+    }
+  } catch (error){
+    console.error("Error:", error);
+    alert("Error occured while unenrolling from course.")
+  }
+}
