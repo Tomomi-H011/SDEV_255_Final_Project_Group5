@@ -46,18 +46,26 @@
       <label for="student-id">Student-ID: </label>
       <input type="text" id="student-id" placeholder="ID Number" required>
 
-      <!-- Courses -->
-      <label for="course-select">Courses: </label>
+      <!-- Enrolled Courses -->
+      <label for="course-select">Add Courses: </label>
       <select name="course-select" id="course-select" required>
-        <option value="" disabled selected>Select a Course</option>
+        <option value="" disabled selected>Select a Course to Enroll in: </option>
       </select>
 
       <!-- Enrollment Button -->
       <button type="button" id="enrollBtn">Enroll</button>
+
+      <!-- Remove Courses -->
+      <label for="course-select">Remove Courses: </label>
+      <select name="course-select" id="course-select" required>
+        <option value="" disabled selected>Select a Course to Remove in: </option>
+      </select>
+
+      <!--  Remove Button   -->
       <button type="button" id="removeBtn">Remove</button>
     </form>
     <br>
-    
+    <p class="paragraph-header">Enrolled Courses</p>
     <br>
     <div id="enrolled-course-list"></div>
     <br>
