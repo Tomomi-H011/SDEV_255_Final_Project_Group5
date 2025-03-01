@@ -123,7 +123,7 @@ addEventListener("DOMContentLoaded", function () {
 
   // Remove Button
   document.getElementById('removeBtn').addEventListener('click', function(){
-    const courseId = document.getElementById('remove-course-select') // Get Selected Course ID
+    const courseId = document.getElementById('remove-course-select').value // Get Selected Course ID
 
     removeCourse(courseId); // Call removeCourse function with the selected course ID
   });
