@@ -54,7 +54,8 @@ const authorizeRole = (role) => (req, res, next) => {
 
 // Logout Route (Adds Token to Blacklist)
 app.post("/api/logout", (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1];
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {
         return res.status(401).json({ message: "No token provided" });
