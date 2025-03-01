@@ -169,13 +169,12 @@ async function removeCourse(courseId) {
   // const userId = getUserId(); // Retrieve the userId from local storage
 
   try{
-    let response = await fetch('https://merciful-spiral-heliotrope.glitch.me/api/user/remove', {
+    let response = await fetch(`https://merciful-spiral-heliotrope.glitch.me/api/user/remove?courseId=${courseId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}` //Add token to Autorization header
       },
-      body: JSON.stringify({ courseId: courseId }) // Send the selected course ID in the request
     });
     if (response.ok){
       alert("Removed from Course Successfully");
