@@ -270,6 +270,29 @@ app.post('/api/user/enroll', authenticateToken, authorizeRole('student'), async 
     }
 });
 
+// Unenroll from a Course (Student Only)
+app.delete('/api/user/remove', authenticateToken, authorizeRole('student'), async (req, res) => {
+    const { courseId } = req.body;
+
+    if (!courseId) return res.status(400).json({ message: 'Course ID is required' });
+
+    try {
+        const student = await User.findById(req.user.id);
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+
+        if (!student.enrolledCourses.includes(courseId)) {
+            return res.status(400).json({ message: 'Not enrolled in this course' });
+        }
+
+        student.enrolledCourses = student.enrolledCourses.filter(id => id !== courseId); //Create a new array with the course removed
+        await student.save();
+
+        return res.status(200).json({ message: 'Course unenrolled successfully' });
+    } catch (error) {
+        console.error("Error unenrolling from course:", error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 // Apply Middleware to Protect Routes
 app.use("/api/courses", authenticateToken);
