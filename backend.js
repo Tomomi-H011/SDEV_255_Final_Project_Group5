@@ -273,7 +273,7 @@ app.post('/api/user/enroll', authenticateToken, authorizeRole('student'), async 
 
 // Unenroll from a Course (Student Only)
 app.delete('/api/user/remove', authenticateToken, authorizeRole('student'), async (req, res) => {
-    const { courseId } = req.body;
+    const { courseId } = req.query;
 
     if (!courseId) return res.status(400).json({ message: 'Course ID is required' });
 
