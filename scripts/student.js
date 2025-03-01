@@ -149,6 +149,7 @@ async function enrollCourse() {
     if (response.ok) {
       alert("Enrolled successfully");
       populateCourses(); // Repopulate the courses in the dropdown
+      populateCoursesToRemove(); //Repopulate the enrolled courses in the remove-course-select section
       displayEnrolledCourses(); // Repopulate the enrolled courses in the enrolled-course-list section
     }
     else if (response.status === 400) {
