@@ -71,7 +71,7 @@ async function fetchAllCourses() {
 
 
 
-// Function to populate the select element with courses
+// Function to populate the select element with available courses
 async function populateCourses() {
   const allCourses = await fetchAllCourses();  // Returns array of all courses
   const enrolledCourseIds = await fetchEnrolledCourses();  // Returns array of enrolled courses
@@ -90,9 +90,26 @@ async function populateCourses() {
 
 }
 
+// Function to populate the select element with enrolled courses
+async function populateCoursesToRemove() {
+  const allCourses = await fetchAllCourses();  // Returns array of all courses
+  const enrolledCourseIds = await fetchEnrolledCourses();  // Returns array of enrolled courses
+  const courseSelect = document.getElementById('remove-course-select');
+  courseSelect.innerHTML = ''; // Clear the select element
+
+  enrolledCourseIds.forEach(courseId => {
+    const course = allCourses.find(course => course.courseId === courseId); // Find the course object with the same courseId from the list of all courses
+    let option = document.createElement('option');
+    option.value = courseId;
+    option.textContent = `${course.courseId} : ${course.courseName}`;
+    courseSelect.appendChild(option);
+  });
+}
+
 
 addEventListener("DOMContentLoaded", function () {
-  populateCourses(); // Populate the select element with courses
+  populateCourses(); // Populate the select element with available courses
+  populateCoursesToRemove(); // Populate the select element with enrolled courses
   displayEnrolledCourses(); // Display the enrolled courses in the enrolled-course-list section
   document.querySelector("#enrollBtn").addEventListener("click", enrollCourse);
 
@@ -139,7 +156,7 @@ async function enrollCourse() {
 
 // Remove Button
 document.getElementById('removeBtn').addEventListener('click', function(){
-  const courseId = document.getElementById('course-select') // Get Selected Course ID
+  const courseId = document.getElementById('remove-course-select') // Get Selected Course ID
 
   removeCourse(courseId); // Call removeCourse function with the selected course ID
 });
@@ -147,19 +164,21 @@ document.getElementById('removeBtn').addEventListener('click', function(){
 // Remove Course Function
 async function removeCourse(courseId) {
   const token = getToken(); // Retrieve the token from local storage
-  const userId = getUserId(); // Retrieve the userId from local storage
+  // const userId = getUserId(); // Retrieve the userId from local storage
 
   try{
-    let response = await fetch(`https://merciful-spiral-heliotrope.glitch.me/api/user/remove/${courseId}`, {
+    let response = await fetch('https://merciful-spiral-heliotrope.glitch.me/api/user/remove', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}` //Add token to Autorization header
-      }
+      },
+      body: JSON.stringify({ courseId: courseId }) // Send the selected course ID in the request
     });
     if (response.ok){
       alert("Removed from Course Successfully");
       populateCourses(); //Repopulate the courses in dropdown
+      populateCoursesToRemove(); //Repopulate the enrolled courses in the remove-course-select section
       displayEnrolledCourses(); //Repopulate the enrolled courses in the enrolled-courses-list section
     } else if (response.status === 400){
       alert("Course ID is required");
