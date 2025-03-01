@@ -120,6 +120,14 @@ addEventListener("DOMContentLoaded", function () {
         // let courses = JSON.parse(localStorage.getItem('courses')) || [];
 
         // let courseSelect =  document.getElementById('course-select');
+
+  // Remove Button
+  document.getElementById('removeBtn').addEventListener('click', function(){
+    const courseId = document.getElementById('remove-course-select') // Get Selected Course ID
+
+    removeCourse(courseId); // Call removeCourse function with the selected course ID
+  });
+
 });
 
 // Enroll Course function
@@ -154,12 +162,6 @@ async function enrollCourse() {
 };
 
 
-// Remove Button
-document.getElementById('removeBtn').addEventListener('click', function(){
-  const courseId = document.getElementById('remove-course-select') // Get Selected Course ID
-
-  removeCourse(courseId); // Call removeCourse function with the selected course ID
-});
 
 // Remove Course Function
 async function removeCourse(courseId) {
