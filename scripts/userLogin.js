@@ -1,11 +1,18 @@
 let token;
 
 window.onload = function(){
-    document.querySelector("#loginBtn").addEventListener("click", async function(){
-        const userId = document.querySelector("#userId").value; // Grab the values from the input fields
-        const password = document.querySelector("#password").value;
-        login(userId, password);
-    });
+    // document.querySelector("#loginBtn").addEventListener("click", async function(){
+    //     const userId = document.querySelector("#userId").value; // Grab the values from the input fields
+    //     const password = document.querySelector("#password").value;
+    //     login(userId, password);
+    // });
+    const loginBtn = document.querySelector("#loginBtn");
+    if (loginBtn) {
+        loginBtn.addEventListener("click", async function(){
+            const userId = document.querySelector("#userId").value; // Grab the values from the input fields
+            const password = document.querySelector("#password").value;
+            login(userId, password);
+        });
 
     const logoutBtn = document.querySelector("#logoutBtn");
     if (logoutBtn) {
