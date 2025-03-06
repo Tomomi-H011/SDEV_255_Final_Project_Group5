@@ -5,7 +5,16 @@ window.onload = function(){
         const userId = document.querySelector("#userId").value; // Grab the values from the input fields
         const password = document.querySelector("#password").value;
         login(userId, password);
-    })
+    });
+
+    const logoutBtn = document.querySelector("#logoutBtn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function() {
+            localStorage.removeItem("token"); 
+            localStorage.removeItem("userId"); 
+            window.location.replace("login.html"); 
+        });
+    }
 };
 
 async function login(userId, password){
