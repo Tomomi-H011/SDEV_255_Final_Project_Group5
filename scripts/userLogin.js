@@ -13,7 +13,7 @@ window.onload = function(){
             const password = document.querySelector("#password").value;
             login(userId, password);
         });
-
+    }
     const logoutBtn = document.querySelector("#logoutBtn");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function() {
