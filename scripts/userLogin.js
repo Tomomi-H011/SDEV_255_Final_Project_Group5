@@ -12,7 +12,7 @@ window.onload = function(){
         logoutBtn.addEventListener("click", function() {
             localStorage.removeItem("token"); 
             localStorage.removeItem("userId"); 
-            window.location.replace("login.html"); 
+            window.location.replace("index.html"); 
         });
     }
 };
