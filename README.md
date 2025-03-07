@@ -53,8 +53,8 @@ The Course Enrollment System allows teachers and students to manage course listi
    
      •	Click Logout to exit the system.
   
-     •	Your course data will be saved when you log in again.
+     •	Your course data will still be in the system when you log in again.
   
-       ⚠ Note: Teachers and students have different permissions. To switch roles, log out and log back in.
+      ⚠ Note: Teachers and students have different permissions. To switch roles, log out and log back in.
 
 
